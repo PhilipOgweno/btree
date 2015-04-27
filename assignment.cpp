@@ -1,4 +1,15 @@
 
+/**
+ * Homework 9 Program
+ * OBJECTIVES: To Translate knowledge about Trees into a tangible Code; and 
+ * To Learn how to interact with a main Repository (with No Push Permission).
+ * Code by  Ogweno Luke Philip
+ * 27 April 2015
+ * Github account: git@github.com:PhilipOgweno/btree.git
+ * 
+ */
+ 
+/// External Libraries
 #include <iostream>
 #include <cstdlib>
 
@@ -42,6 +53,7 @@ private:
 
 btree::btree() {
     // set the root to NULL
+    root = NULL;
 }
 
 bool btree::isEmpty()
@@ -49,22 +61,78 @@ bool btree::isEmpty()
     // This functions returns true if the tree is
     // empty and false if it is not empty. You just
     // need to look at the root.
+    if ( root == NULL ) 
+    { 
+    return true;
+    }
+    else
+    {
+    return false;
+    }
 }
 
 void btree::insert(int d)
 {
     // this function must insert the value d in the tree
-
+    node *temp, *parent;
     // first of all, check if d already exists in the tree
     // you can do this by calling to the search(int) function
+    bool check = btree::search(d);
 
+    if ( !check )
+    
     // if d is not in the tree already, create a new node with data equal d
+    {
+        if ( btree::isEmpty() )
+        
+        // if the tree is empty, set the root to the new node
 
-    // if the tree is empty, set the root to the new node
-
+        {
+            root = new node;
+            root->data = d;
+            root->left = NULL;
+            root->right = NULL;
+            temp = root;
+        }
+        else
+        
     // if the tree is not empty, look for the right place where to insert d
     // in order to do this, you may need to keep track of the potential
     // parent node to which the new node will be attached as a child
+            {
+            temp=root;
+            while (temp!=NULL) {
+                if ( d < temp->data )
+                {
+                    parent = temp;
+                    temp=temp->left;
+                }
+                else if ( d > temp->data )
+                {
+                    parent =temp;
+                    temp=temp->right;
+                }               
+            }   
+            node *newNode  = new node;
+            newNode->data  = d;
+            newNode->left  = NULL;
+            newNode->right = NULL;
+
+            //Now insert the new node below the parent
+            if(d <= parent->data)
+            {
+                parent->left = newNode;
+            }   
+            else
+            {
+                parent->right = newNode;
+            }    
+        }
+    }
+    else
+    {
+        return;
+    }    
 }
 
 void btree::remove(int d)
