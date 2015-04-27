@@ -89,8 +89,8 @@ void btree::insert(int d)
 
         {
             root = new node;
-            root->data = d;
-            root->left = NULL;
+            root->data  = d;
+            root->left  = NULL;
             root->right = NULL;
             temp = root;
         }
@@ -101,31 +101,31 @@ void btree::insert(int d)
     // parent node to which the new node will be attached as a child
             {
             temp=root;
-            while (temp!=NULL) {
+            while (temp! = NULL) {
                 if ( d < temp->data )
                 {
                     parent = temp;
-                    temp=temp->left;
+                    temp = temp->left;
                 }
                 else if ( d > temp->data )
                 {
-                    parent =temp;
-                    temp=temp->right;
+                    parent = temp;
+                    temp = temp->right;
                 }               
             }   
-            node *newNode  = new node;
-            newNode->data  = d;
-            newNode->left  = NULL;
-            newNode->right = NULL;
+            node *newnode  = new node;
+            newnode->data  = d;
+            newnode->left  = NULL;
+            newnode->right = NULL;
 
             //Now insert the new node below the parent
             if(d <= parent->data)
             {
-                parent->left = newNode;
+                parent->left = newnode;
             }   
             else
             {
-                parent->right = newNode;
+                parent->right = newnode;
             }    
         }
     }
@@ -140,19 +140,203 @@ void btree::remove(int d)
     // this function must remove the node that has the value d
 
     // first of all, check if the tree is empty
+    node *temp1, *temp2;
+    bool check = false, found = false;
+    if ( btree::isEmpty() )
+    {
+    return;
+    }
+    else
     // if it is not, then locate the element with the value
+    {
+        check = btree::search(d);
+        if ( !check ) 
+        {
+            cout << " Element Not Found!!!";
+        }       
+        else
+        {
+            temp1 = root;
+            temp2 = root;
+            while ( ( temp1 != NULL ) && ( !found ) )
+            {
+                if ( temp1->data == d )
+                {
+                    found = true;
+                }
+                else
+                {
+                    temp2 = temp1;
+                    if ( temp1->data > d )
+                    {
+                        temp1 = temp1->left;
+                    }
+                    else
+                    {
+                        temp1 = temp1->right;
+                    }
+                }
+            }
     // once you know the location, that is, you have the pointer to the node
     // with the value you want to eliminate, you will have three cases:
     //    1. you're removing a leaf node
     //    2. you're removing a node with a single child
     //    3. you're removing a node with 2 children
     // make sure you can handle all three cases.
+    if ( found )
+            {
+                if ( temp1 == root )
+                {
+                    node *current, *trailCurrent, *temp;
+
+                    if (root->left == NULL && root->right == NULL)
+                    {
+                        temp = root;
+                        root = NULL;
+                        delete temp;
+                    }
+                    else if (root->left == NULL)
+                    {
+                        temp = root;
+                        root = temp->right;
+                        delete temp;
+                    }
+                   else if (root->right == NULL)
+                   {
+                        temp = root;
+                        root = temp->left;
+                        delete temp;
+                   }
+                   else
+                   {
+                        current = root->left;
+                        trailCurrent = NULL;
+
+                        while (current->right != NULL)
+                        {
+                            trailCurrent = current;
+                            current = current->right;
+                        }
+
+                        root->data = current->data;
+
+                        if (trailCurrent == NULL)
+                        {
+                            root->left = current->left;
+                        }    
+                        else
+                        {
+                            trailCurrent->right = current->left;
+                        }    
+
+                        delete current;
+                    }    
+                }
+                else if ( temp2->data > d)
+                {
+                    node *current, *trailCurrent, *temp;
+
+                    if (temp2->left->left == NULL && temp2->left->right == NULL)
+                    {
+                        temp = temp2->left;
+                        temp2->left = NULL;
+                        delete temp;
+                    }
+                    else if (temp2->left->left == NULL)
+                    {
+                        temp = temp2->left;
+                        temp2->left = temp->right;
+                        delete temp;
+                    }
+                   else if (temp2->left->right == NULL)
+                   {
+                        temp = temp2->left;
+                        temp2->left = temp->left;
+                        delete temp;
+                   }
+                   else
+                   {
+                        current = temp2->left->left;
+                        trailCurrent = NULL;
+
+                        while (current->right != NULL)
+                        {
+                            trailCurrent = current;
+                            current = current->right;
+                        }
+
+                        temp2->left->data = current->data;
+
+                        if (trailCurrent == NULL) 
+                        {
+                             temp2->left->left = current->left;
+                        }    
+                        else
+                        {
+                            trailCurrent->right = current->left;
+                        }
+
+                        delete current;
+                   }
+                }
+                else
+                {
+                    node *current, *trailCurrent, *temp;
+
+                    if (temp2->right->left == NULL && temp2->right->right == NULL)
+                    {
+                        temp = temp2->right;
+                        temp2->right = NULL;
+                        delete temp;
+                    }
+                    else if (temp2->right->left == NULL)
+                    {
+                        temp = temp2->right;
+                        temp2->right = temp->right;
+                        delete temp;
+                    }
+                   else if (temp2->right->right == NULL)
+                   {
+                        temp = temp2->right;
+                        temp2->right = temp->left;
+                        delete temp;
+                   }
+                   else
+                   {
+                        current = temp2->right->left;
+                        trailCurrent = NULL;
+
+                        while (current->right != NULL)
+                        {
+                        trailCurrent = current;
+                        current = current->right;
+                        }
+
+                        temp2->right->data = current->data;
+
+                        if (trailCurrent == NULL)
+                        {
+                             temp2->right->left = current->left;
+                        }    
+                        else
+                        {
+                            trailCurrent->right = current->left;
+                        }    
+
+                        delete current;
+                    }                    }
+            }
+        }
+    }
 }
+
 
 void btree::print_inorder()
 {
     // this function must call the private inorder(node*)
     // function passing the root as the parameter
+    btree::inorder(root);
+    return;
 }
 
 void btree::inorder(node* p)
@@ -163,12 +347,20 @@ void btree::inorder(node* p)
     // print the data in the node to cout leaving a blank
     // space to separate from the next/previous value.
     // The function must use recursion.
+    if ( p != NULL )
+    {                               // (If there's nothing to print.)
+        inorder( p->left );         // Print items in left subtree.
+        cout << p->data << " ";     // Print the Value.
+        inorder( p->right );        // Print items in right subtree.
+    }
 }
 
 void btree::print_preorder()
 {
     // This function must call the private pre-order(node*)
     // function passing the root as the parameter
+    btree::preorder(root);
+    return;
 }
 
 void btree::preorder(node* p)
@@ -179,12 +371,20 @@ void btree::preorder(node* p)
     // print the data in the node to cout leaving a blank
     // space to separate from the next/previous value.
     // The function must use recursion.
+    if ( p != NULL )
+    {                           // (If there's nothing to print.)
+        cout << p->data << " "; // Print the value.
+        preorder( p->left );    // Print items in left subtree.
+        preorder( p->right );   // Print items in right subtree.
+    }
 }
 
 void btree::print_postorder()
 {
     // This function must call the private post-order(node*)
     // function passing the root as the parameter
+    btree::postorder(root);
+    return;
 }
 
 void btree::postorder(node* p)
@@ -195,6 +395,12 @@ void btree::postorder(node* p)
     // print the data in the node to cout leaving a blank
     // space to separate from the next/previous value.
     // The function must use recursion.
+    if ( p != NULL )
+    {  // (Otherwise, there's nothing to print.)
+        postorder( p->left );    // Print items in left subtree.
+        postorder( p->right );   // Print items in right subtree.
+        cout << p->data << " ";  // Print the value.
+    }
 }
 
 bool btree::search(int val)
@@ -203,6 +409,14 @@ bool btree::search(int val)
     // search_element(node*,int) passing the root and
     // the integer value val as parameters. The function
     // must use recursion.
+    if ( btree::search_element(root, val) )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 bool btree::search_element(node* p, int val) {
@@ -212,6 +426,26 @@ bool btree::search_element(node* p, int val) {
     // if the value is never found, it returns false.
     // If the value is found, then it returns true.
     // The function must use recursion.
+    if ( p == NULL )
+    {
+        // Tree is empty, so it certainly doesn't contain item.
+        return false;
+    }
+    else if ( val == p->data )
+    {
+        // the item has been found in the root node.
+        return true;
+    }
+    else if ( val < p->data )
+    {
+        // If the item occurs, it must be in the left subtree.
+        return search_element( p->left, val );
+    }
+    else
+    {
+    // If the item occurs, it must be in the right subtree.
+    return search_element( p->right, val );
+    }
 }
 
 int main(int argc, char* argv[])
