@@ -537,8 +537,8 @@ int main(int argc, char* argv[])
             cout << " Enter data to be searched: ";
             cin >> tmp1;
             ans = my_tree.search(tmp1);
-            if (ans) cout << tmp1 << " was found!!!" << endl;
-            else cout << tmp1 << " was not found" << endl;
+            if (ans) cout << tmp1 << " was found !!" << endl;
+            else cout << tmp1 << " was not found !!" << endl;
             break;
         // ***************************************************
         // If you decide to implement the extra credit options
